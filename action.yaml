@@ -1,5 +1,5 @@
-name: Retrieve GitHub SBOM Action
-description: A composite action that retrieves SBOMs from GitHub
+name: GitHub SBOM(s) Generator Action
+description: A composite action that generate SBOM(s) from GitHub
 branding:
   icon: activity
   color: orange
@@ -22,6 +22,10 @@ runs:
   steps:
     - name: Run Action
       shell: bash
-      run: |
-        chmod +x ${{ github.action_path }}/get-sboms.sh
-        sh ${{ github.action_path }}/get-sboms.sh -r "${{ inputs.repo_list_path }}" -f "${{ inputs.save_directory_path }}" -t ${{ inputs.github_token }}
+      run: | #x-release-please-start-version
+        version=v1.1.0 
+        mkdir -p ${{ github.action_path }}
+        curl -L https://github.com/Brend-Smits/retrieve-github-sbom-action/releases/download/$version/github-sbom-generator > ${{ github.action_path }}/github-sbom-generator
+        chmod +x ${{ github.action_path }}/github-sbom-generator
+        /${{ github.action_path }}/github-sbom-generator --repo-list-path "${{ inputs.repo_list_path }}" --save-directory-path "${{ inputs.save_directory_path }}" --token ${{ inputs.github_token }}
+      #x-release-please-end

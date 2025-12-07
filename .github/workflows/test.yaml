@@ -1,13 +1,13 @@
 name: Test Retrieve SBOMs Action
-on: [push]
+on:
+  pull_request:
 jobs:
   test:
+    if: "!contains(github.ref_name, 'release-please')"
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
-    # - run: ls -all .github/lib
 
     - name: Run Retrieve SBOM Action
       uses: ./
@@ -15,4 +15,4 @@ jobs:
         repo_list_path: .github/lib/gh-data.txt
         github_token: ${{ secrets.GITHUB_TOKEN }}
         debug: true
-        save_directory_path: .github/lib/test-output/
+        save_directory_path: .github/lib/test-output
